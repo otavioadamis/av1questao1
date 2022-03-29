@@ -1,0 +1,194 @@
+import java.util.Scanner;
+class No {
+
+    public String nome;
+    public No proximo;
+    public No anterior;
+
+    public No(String nome){
+        this.nome = nome;
+        proximo = null;
+    }
+
+}
+
+class No2 {
+
+    public Lista lista;
+    public No2 proximo;
+    public No2 anterior;
+
+    public No2(Lista lista){
+        this.lista = lista;
+        proximo = null;
+    }
+
+}
+
+class Lista {
+
+    private No primeiro;
+    private No ultimo;
+
+    public Lista(){
+        primeiro = null;
+        ultimo = null;
+
+    }
+
+    public boolean add(String elemento){
+
+        No novo = new No(elemento);
+
+        if(primeiro == null){
+            primeiro = novo;
+            ultimo = novo;
+            novo.proximo = null;
+            novo.anterior = null;
+        }
+        else{
+            No aux = primeiro;
+            while (aux != null && novo.nome.length() > aux.nome.length()){
+                aux = aux.proximo;
+            }
+            if(aux != null && aux.nome.length() == novo.nome.length()){
+              return false;
+            }
+            if(aux == primeiro){
+                novo.proximo = primeiro;
+                novo.anterior = null;
+                primeiro.anterior = novo;
+                primeiro = novo;
+            }
+            else if(aux == null){
+                ultimo.proximo = novo;
+                novo.anterior = ultimo;
+                ultimo = novo;
+                ultimo.proximo = null;
+            }
+            else{
+                novo.proximo = aux;
+                aux.anterior.proximo = novo;
+                novo.anterior = aux.anterior;
+                aux.anterior = novo;
+            }
+        }
+      return true;
+    }
+
+  public void procurar(int index){
+    No aux = primeiro;
+    for(int i = 1; i < index; i++){
+      aux = aux.proximo;
+    }
+    System.out.print(aux.nome);
+  }
+
+    public void mostrar(){
+        No aux = primeiro;
+        while(aux != null){
+            System.out.print(aux.nome + " ");
+            aux = aux.proximo;
+        }
+    }
+
+}
+
+class Listas{
+
+  private No2 primeiro;
+    private No2 ultimo;
+
+    public Listas(){
+        primeiro = null;
+        ultimo = null;
+
+    }
+
+    public void add(Lista elemento){
+
+        No2 novo = new No2(elemento);
+
+        if(primeiro == null){
+            primeiro = novo;
+            ultimo = novo;
+            novo.proximo = null;
+            novo.anterior = null;
+        }
+        else{
+            No2 aux = primeiro;
+            while (aux != null){
+                aux = aux.proximo;
+            }
+            if(aux == primeiro){
+                novo.proximo = primeiro;
+                novo.anterior = null;
+                primeiro.anterior = novo;
+                primeiro = novo;
+            }
+            else if(aux == null){
+                ultimo.proximo = novo;
+                novo.anterior = ultimo;
+                ultimo = novo;
+                ultimo.proximo = null;
+            }
+            else{
+                novo.proximo = aux;
+                aux.anterior.proximo = novo;
+                novo.anterior = aux.anterior;
+                aux.anterior = novo;
+            }
+        }
+    }
+
+  public Lista procurar(int index){
+    No2 aux = primeiro;
+    for(int i = 1; i < index; i++){
+      aux = aux.proximo;
+    }
+    if(aux == null){
+      return null;
+    }
+    return (aux.lista);
+  }
+}
+
+
+class Main {
+  
+  public static void main(String args[]) { 
+
+      Lista lista = new Lista();
+      Listas listas = new Listas();
+      int index = 1;
+      listas.add(lista);
+      
+      
+    Scanner entrada = new Scanner(System.in);
+      
+        String nome = entrada.nextLine();
+        String[] array = nome.split(" ");
+
+        for(int i = 0; i < Integer.parseInt(array[0]);           i++){
+          String cod = entrada.nextLine();
+          if(!listas.procurar(index).add(cod)){
+            checar(listas,index,cod);
+          }
+        }    
+        for(int i = 1; i <= index; i++){
+          listas.procurar(i).mostrar();
+          System.out.println();
+        }
+  } 
+  private static void checar(Listas listas, int index, String cod){
+    index++;
+    if(listas.procurar(index) != null && !listas.procurar(index).add(cod)){
+      checar(listas, index, cod);    
+    } else {
+      Lista newlista = new Lista();
+      listas.add(newlista);
+      listas.procurar(index).add(cod);
+    }
+    
+  }
+}
